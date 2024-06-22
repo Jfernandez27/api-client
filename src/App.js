@@ -9,6 +9,7 @@ import Nav from './components/layout/Navegation';
 /**  Components **/
 import Customer from './components/customers/Customers';
 import NewCustomer from './components/customers/NewCustomer';
+import EditCustomer from './components/customers/EditCustomer';
 
 import Products from './components/products/Products';
 import Orders from './components/orders/Orders';
@@ -27,6 +28,11 @@ function App() {
                                 exact
                                 path="/customers/new"
                                 component={NewCustomer}
+                            />
+                            <Route
+                                exact
+                                path="/customers/edit/:id"
+                                component={EditCustomer}
                             />
                             <Route
                                 exact

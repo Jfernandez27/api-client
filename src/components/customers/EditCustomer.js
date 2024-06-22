@@ -1,10 +1,12 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { withRouter } from 'react-router-dom';
 import axiosClient from '../../config/axios';
 
-function NewCustomer({ history }) {
-    let [customer, saveCustomer] = useState({
+function EditCustomer(props) {
+    const { id } = props.match.params;
+
+    let [customer, dataCustomer] = useState({
         name: '',
         lastname: '',
         company: '',
@@ -12,8 +14,17 @@ function NewCustomer({ history }) {
         phone: '',
     });
 
+    const apiQuery = async () => {
+        const customersQuery = await axiosClient.get(`/customers/${id}`);
+        dataCustomer(customersQuery.data);
+    };
+
+    useEffect(() => {
+        apiQuery();
+    }, []);
+
     const handleChange = (e) => {
-        saveCustomer({
+        dataCustomer({
             ...customer,
             [e.target.name]: e.target.value,
         });
@@ -36,16 +47,17 @@ function NewCustomer({ history }) {
         e.preventDefault();
 
         axiosClient
-            .post('/customers', customer)
+            .put(`/customers/${customer._id}`, customer)
             .then((res) => {
                 Swal.fire({
-                    title: 'Customer Added',
+                    title: 'Customer Updated',
                     text: res.data.message,
                     icon: 'success',
                 });
-                history.push('/');
+                props.history.push('/');
             })
             .catch((err) => {
+                console.log(err);
                 Swal.fire({
                     title: 'Error',
                     text: err.response.data,
@@ -56,7 +68,9 @@ function NewCustomer({ history }) {
 
     return (
         <Fragment>
-            <h2>New Customer</h2>
+            <h2>
+                Edit Customer: {customer.name} {customer.lastname}
+            </h2>
 
             <form onSubmit={handleSubmit}>
                 <legend>Fill in all fields</legend>
@@ -67,6 +81,7 @@ function NewCustomer({ history }) {
                         placeholder="Customer name"
                         name="name"
                         onChange={handleChange}
+                        value={customer.name}
                     />
                 </div>
 
@@ -77,6 +92,7 @@ function NewCustomer({ history }) {
                         placeholder="Customer Lastname"
                         name="lastname"
                         onChange={handleChange}
+                        value={customer.lastname}
                     />
                 </div>
 
@@ -87,6 +103,7 @@ function NewCustomer({ history }) {
                         placeholder="Customer Company"
                         name="company"
                         onChange={handleChange}
+                        value={customer.company}
                     />
                 </div>
 
@@ -97,6 +114,7 @@ function NewCustomer({ history }) {
                         placeholder="Customer Email"
                         name="email"
                         onChange={handleChange}
+                        value={customer.email}
                     />
                 </div>
 
@@ -107,6 +125,7 @@ function NewCustomer({ history }) {
                         placeholder="Customer Phone"
                         name="phone"
                         onChange={handleChange}
+                        value={customer.phone}
                     />
                 </div>
 
@@ -114,7 +133,7 @@ function NewCustomer({ history }) {
                     <input
                         type="submit"
                         className="btn btn-azul"
-                        value="Add Customer"
+                        value="Update Customer"
                         disabled={customerValidate()}
                     />
                 </div>
@@ -123,4 +142,4 @@ function NewCustomer({ history }) {
     );
 }
 //HOC (Higher Order Component), is a function that takes a component and returns a new component.
-export default withRouter(NewCustomer);
+export default withRouter(EditCustomer);

@@ -16,7 +16,7 @@ function Customers() {
 
     useEffect(() => {
         apiQuery();
-    }, []); // Empty array means this effect runs once after the initial render
+    }, [customers]); // Empty array means this effect runs once after the initial render
 
     return (
         <Fragment>
