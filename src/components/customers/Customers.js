@@ -1,8 +1,9 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import axiosClient from '../../config/axios';
 import { Link } from 'react-router-dom';
+import axiosClient from '../../config/axios';
 
 import Customer from './Customer';
+import Spinner from '../layout/Spinner';
 
 function Customers() {
     // Work with State
@@ -17,6 +18,8 @@ function Customers() {
     useEffect(() => {
         apiQuery();
     }, [customers]); // Empty array means this effect runs once after the initial render
+
+    if (!customers) return <Spinner />;
 
     return (
         <Fragment>
