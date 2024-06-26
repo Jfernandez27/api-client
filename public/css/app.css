@@ -451,3 +451,7 @@ h3.resumen-titulo {
 .login .contenedor-formulario {
 
 }
+
+div#swal2-html-container {
+    font-size: large;
+}

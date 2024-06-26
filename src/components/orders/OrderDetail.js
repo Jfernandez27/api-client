@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axiosClient from '../../config/axios';
 
-function Customer({ customer }) {
-    const { _id, name, lastname, company, email, phone } = customer;
-
-    const deleteCustomer = (id) => {
+function OrderDetail({ order }) {
+    const { customer } = order;
+    const deleteOrder = (id) => {
         Swal.fire({
             title: `Are you sure? `,
             text: "You won't be able to revert this!",
@@ -18,7 +17,7 @@ function Customer({ customer }) {
         }).then((result) => {
             if (result.isConfirmed) {
                 axiosClient
-                    .delete(`/customers/${id}`)
+                    .delete(`/orders/${id}`)
                     .then((res) => {
                         Swal.fire({
                             title: 'Deleted!',
@@ -38,37 +37,45 @@ function Customer({ customer }) {
             }
         });
     };
-
     return (
-        <li className="cliente">
-            <div className="info-cliente">
+        <li className="pedido">
+            <div className="info-pedido">
+                <p className="id">ID: {order._id}]</p>
                 <p className="nombre">
-                    {name} {lastname}
+                    Customer: {customer.name} {customer.lastname}
                 </p>
-                <p className="empresa">{company}</p>
-                <p>{email}</p>
-                <p>Tel: {phone}</p>
+
+                <div className="articulos-pedido">
+                    <p className="productos">Items Ordered: </p>
+                    <ul>
+                        {order.order.map((article) => (
+                            <li key={order._id + article.product._id}>
+                                <p>{article.product.name}</p>
+                                <p>Price: ${article.product.price}</p>
+                                <p>Quantity: {article.quantity}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <p className="total">Total: {order.total} </p>
             </div>
             <div className="acciones">
-                <Link to={`/customers/edit/${_id}`} className="btn btn-azul">
+                <Link to={'#'} className="btn btn-azul">
                     <i className="fas fa-pen-alt"></i>
-                    Edit Customer
+                    Edit Order
                 </Link>
-                <Link to={`/orders/new/${_id}`} className="btn btn-amarillo">
-                    <i className="fas fa-plus"></i>
-                    Add Order
-                </Link>
+
                 <button
                     type="button"
                     className="btn btn-rojo btn-eliminar"
-                    onClick={() => deleteCustomer(_id)}
+                    onClick={() => deleteOrder(order._id)}
                 >
                     <i className="fas fa-times"></i>
-                    Delete Customer
+                    Delete Order
                 </button>
             </div>
         </li>
     );
 }
 
-export default Customer;
+export default OrderDetail;

@@ -139,4 +139,4 @@ function EditProduct(props) {
     );
 }
 
-export default EditProduct;
+export default withRouter(EditProduct);
