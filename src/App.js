@@ -18,6 +18,8 @@ import EditProduct from './components/products/EditProduct';
 import Orders from './components/orders/Orders';
 import NewOrder from './components/orders/NewOrder';
 
+import Login from './components/auth/Login';
+
 function App() {
     return (
         <Router>
@@ -63,6 +65,9 @@ function App() {
                                 path="/orders/new/:customerId"
                                 component={NewOrder}
                             />
+
+                            {/* Auth  */}
+                            <Route exact path="/login" component={Login} />
                         </Switch>
                     </main>
                 </div>
